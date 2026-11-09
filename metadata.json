@@ -1,0 +1,6 @@
+{
+  "name": "NexusRadio Pro - PoC & DMR Systems",
+  "description": "Katalog Resmi Radio PoC & DMR Profesional dengan CMS Manajemen Produk & Spesifikasi Teknis.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
