@@ -127,7 +127,7 @@ export const Footer: React.FC<FooterProps> = ({
             <div className="space-y-2 text-[11px] text-slate-400">
               <div className="flex items-start gap-2">
                 <MapPin className="w-3.5 h-3.5 text-amber-400 shrink-0 mt-0.5" />
-                <span>Kawasan Telekomunikasi & Industri Terpadu, Jakarta / Balikpapan Hub, Indonesia</span>
+                <span>Cilandak, Jakarta Selatan</span>
               </div>
               <div className="flex items-center gap-2">
                 <Phone className="w-3.5 h-3.5 text-amber-400 shrink-0" />
@@ -135,7 +135,7 @@ export const Footer: React.FC<FooterProps> = ({
               </div>
               <div className="flex items-center gap-2">
                 <Mail className="w-3.5 h-3.5 text-amber-400 shrink-0" />
-                <span>sales@icone-globaltech.co.id</span>
+                <span>sales@iconeglobaltech.com</span>
               </div>
             </div>
           </div>
