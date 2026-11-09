@@ -24,7 +24,7 @@ export const Hero: React.FC<HeroProps> = ({
             <div className="flex items-center gap-2 text-xs font-mono text-amber-400 tracking-wider">
               <span>STANDAR TELEKOMUNIKASI INDUSTRI</span>
               <span aria-hidden="true">·</span>
-              <span>ETSI DMR TIER II & III</span>
+              <span>DMR TIER I & II</span>
               <span aria-hidden="true">·</span>
               <span>4G LTE PTT OVER CELLULAR</span>
             </div>
