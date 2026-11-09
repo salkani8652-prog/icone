@@ -16,7 +16,9 @@ import {
   Layers,
   Radio,
   Wifi,
-  ExternalLink
+  ExternalLink,
+  Eye,
+  EyeOff
 } from 'lucide-react';
 
 interface AdminDashboardProps {
@@ -39,6 +41,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
     importCatalogJson,
     adminPin,
     changeAdminPin,
+    resetAdminPin,
     showToast,
   } = useProducts();
 
@@ -50,6 +53,9 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
   const [showPinModal, setShowPinModal] = useState(false);
   const [oldPin, setOldPin] = useState('');
   const [newPin, setNewPin] = useState('');
+  const [confirmPin, setConfirmPin] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
+  const [pinError, setPinError] = useState('');
 
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -99,10 +105,29 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
 
   const handleChangePinSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (changeAdminPin(oldPin, newPin)) {
+    setPinError('');
+
+    if (!oldPin.trim()) {
+      setPinError('Masukkan password saat ini.');
+      return;
+    }
+    if (newPin.trim().length < 4) {
+      setPinError('Password baru minimal 4 karakter.');
+      return;
+    }
+    if (newPin.trim() !== confirmPin.trim()) {
+      setPinError('Konfirmasi password tidak cocok dengan password baru.');
+      return;
+    }
+
+    if (changeAdminPin(oldPin.trim(), newPin.trim())) {
       setShowPinModal(false);
       setOldPin('');
       setNewPin('');
+      setConfirmPin('');
+      setPinError('');
+    } else {
+      setPinError('Password lama salah. Jika lupa, gunakan tombol Reset ke Default.');
     }
   };
 
@@ -407,34 +432,105 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
       {showPinModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-sm">
           <div className="w-full max-w-sm bg-slate-900 border border-slate-800 rounded-lg p-6 space-y-4 text-slate-100">
-            <h3 className="text-base font-bold text-white">Ganti PIN Keamanan Admin</h3>
+            <div className="flex items-center justify-between">
+              <h3 className="text-base font-bold text-white">Ganti Password / PIN Admin</h3>
+              <button
+                onClick={() => {
+                  setShowPinModal(false);
+                  setPinError('');
+                }}
+                className="text-slate-400 hover:text-white"
+              >
+                ✕
+              </button>
+            </div>
+
             <form onSubmit={handleChangePinSubmit} className="space-y-3 text-xs">
               <div>
-                <label className="block text-slate-300 font-medium mb-1">PIN Lama</label>
+                <label className="block text-slate-300 font-medium mb-1">Password Saat Ini</label>
                 <input
                   type="password"
                   required
                   value={oldPin}
-                  onChange={(e) => setOldPin(e.target.value)}
-                  placeholder="Masukkan PIN saat ini"
-                  className="w-full bg-slate-950 border border-slate-800 rounded px-3 py-2 text-white font-mono"
+                  onChange={(e) => {
+                    setOldPin(e.target.value);
+                    setPinError('');
+                  }}
+                  placeholder="Masukkan password saat ini (default: admin123)"
+                  className="w-full bg-slate-950 border border-slate-800 rounded px-3 py-2 text-white font-mono focus:outline-none focus:border-amber-500"
                 />
               </div>
+
               <div>
-                <label className="block text-slate-300 font-medium mb-1">PIN Baru (Minimal 4 Karakter)</label>
+                <label className="block text-slate-300 font-medium mb-1">Password Baru (Minimal 4 Karakter)</label>
+                <div className="relative">
+                  <input
+                    type={showPassword ? 'text' : 'password'}
+                    required
+                    value={newPin}
+                    onChange={(e) => {
+                      setNewPin(e.target.value);
+                      setPinError('');
+                    }}
+                    placeholder="Masukkan password baru"
+                    className="w-full bg-slate-950 border border-slate-800 rounded px-3 pr-9 py-2 text-white font-mono focus:outline-none focus:border-amber-500"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-500 hover:text-slate-300"
+                  >
+                    {showPassword ? <EyeOff className="w-3.5 h-3.5" /> : <Eye className="w-3.5 h-3.5" />}
+                  </button>
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-slate-300 font-medium mb-1">Ulangi Password Baru (Konfirmasi)</label>
                 <input
                   type="password"
                   required
-                  value={newPin}
-                  onChange={(e) => setNewPin(e.target.value)}
-                  placeholder="Masukkan PIN baru"
-                  className="w-full bg-slate-950 border border-slate-800 rounded px-3 py-2 text-white font-mono"
+                  value={confirmPin}
+                  onChange={(e) => {
+                    setConfirmPin(e.target.value);
+                    setPinError('');
+                  }}
+                  placeholder="Ketik ulang password baru"
+                  className="w-full bg-slate-950 border border-slate-800 rounded px-3 py-2 text-white font-mono focus:outline-none focus:border-amber-500"
                 />
               </div>
-              <div className="flex items-center justify-end gap-2 pt-2">
+
+              {pinError && (
+                <p className="text-[11px] text-rose-400 font-medium">{pinError}</p>
+              )}
+
+              <div className="pt-1 flex items-center justify-between text-[10px] text-slate-400">
                 <button
                   type="button"
-                  onClick={() => setShowPinModal(false)}
+                  onClick={() => {
+                    if (window.confirm('Reset password admin ke bawaan pabrikan ("admin123")?')) {
+                      resetAdminPin();
+                      setShowPinModal(false);
+                      setOldPin('');
+                      setNewPin('');
+                      setConfirmPin('');
+                      setPinError('');
+                    }
+                  }}
+                  className="hover:text-amber-400 flex items-center gap-1"
+                >
+                  <RotateCcw className="w-3 h-3" />
+                  <span>Reset ke admin123</span>
+                </button>
+              </div>
+
+              <div className="flex items-center justify-end gap-2 pt-2 border-t border-slate-800">
+                <button
+                  type="button"
+                  onClick={() => {
+                    setShowPinModal(false);
+                    setPinError('');
+                  }}
                   className="px-3 py-1.5 text-slate-400 hover:text-white"
                 >
                   Batal
@@ -443,7 +539,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                   type="submit"
                   className="px-4 py-1.5 font-bold text-slate-950 bg-amber-400 hover:bg-amber-300 rounded transition-colors"
                 >
-                  Simpan PIN Baru
+                  Simpan Password Baru
                 </button>
               </div>
             </form>

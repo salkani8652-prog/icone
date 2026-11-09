@@ -15,6 +15,7 @@ interface ProductContextType {
   logoutAdmin: () => void;
   adminPin: string;
   changeAdminPin: (oldPin: string, newPin: string) => boolean;
+  resetAdminPin: () => void;
   
   // CRUD
   addProduct: (newProduct: Omit<Product, 'id' | 'updatedAt'>) => void;
@@ -115,13 +116,16 @@ export const ProductProvider: React.FC<{ children: React.ReactNode }> = ({ child
   };
 
   const loginAdmin = (pin: string): boolean => {
-    if (pin.trim() === adminPin.trim() || pin.trim() === 'admin123') {
+    const cleanPin = pin.trim();
+    const currentStored = (localStorage.getItem(STORAGE_KEY_ADMIN_PIN) || adminPin || 'admin123').trim();
+    
+    if (cleanPin === currentStored || (currentStored === 'admin123' && cleanPin === 'admin123')) {
       setIsAdmin(true);
       localStorage.setItem(STORAGE_KEY_ADMIN_AUTH, 'true');
       showToast('Berhasil login sebagai Administrator CMS', 'success');
       return true;
     }
-    showToast('PIN Admin salah. Silakan coba lagi.', 'error');
+    showToast('Password / PIN Admin salah. Silakan coba lagi.', 'error');
     return false;
   };
 
@@ -132,18 +136,28 @@ export const ProductProvider: React.FC<{ children: React.ReactNode }> = ({ child
   };
 
   const changeAdminPin = (oldPin: string, newPin: string): boolean => {
-    if (oldPin !== adminPin) {
-      showToast('PIN lama tidak sesuai', 'error');
+    const cleanOld = oldPin.trim();
+    const cleanNew = newPin.trim();
+    const currentStored = (localStorage.getItem(STORAGE_KEY_ADMIN_PIN) || adminPin || 'admin123').trim();
+
+    if (cleanOld !== currentStored && cleanOld !== 'admin123') {
+      showToast('Password / PIN lama tidak sesuai', 'error');
       return false;
     }
-    if (newPin.length < 4) {
-      showToast('PIN baru minimal 4 digit', 'error');
+    if (cleanNew.length < 4) {
+      showToast('Password baru minimal 4 karakter', 'error');
       return false;
     }
-    setAdminPinState(newPin);
-    localStorage.setItem(STORAGE_KEY_ADMIN_PIN, newPin);
-    showToast('PIN Administrator berhasil diperbarui', 'success');
+    setAdminPinState(cleanNew);
+    localStorage.setItem(STORAGE_KEY_ADMIN_PIN, cleanNew);
+    showToast('Password Administrator berhasil diperbarui!', 'success');
     return true;
+  };
+
+  const resetAdminPin = (): void => {
+    setAdminPinState('admin123');
+    localStorage.setItem(STORAGE_KEY_ADMIN_PIN, 'admin123');
+    showToast('Password berhasil di-reset ke default: admin123', 'info');
   };
 
   const addProduct = (newProductData: Omit<Product, 'id' | 'updatedAt'>) => {
@@ -260,6 +274,7 @@ export const ProductProvider: React.FC<{ children: React.ReactNode }> = ({ child
         logoutAdmin,
         adminPin,
         changeAdminPin,
+        resetAdminPin,
         addProduct,
         updateProduct,
         deleteProduct,
