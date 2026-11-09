@@ -40,6 +40,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
     exportCatalogJson,
     importCatalogJson,
     adminPin,
+    isDefaultPin,
     changeAdminPin,
     resetAdminPin,
     showToast,
@@ -504,25 +505,27 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                 <p className="text-[11px] text-rose-400 font-medium">{pinError}</p>
               )}
 
-              <div className="pt-1 flex items-center justify-between text-[10px] text-slate-400">
-                <button
-                  type="button"
-                  onClick={() => {
-                    if (window.confirm('Reset password admin ke bawaan pabrikan ("admin123")?')) {
-                      resetAdminPin();
-                      setShowPinModal(false);
-                      setOldPin('');
-                      setNewPin('');
-                      setConfirmPin('');
-                      setPinError('');
-                    }
-                  }}
-                  className="hover:text-amber-400 flex items-center gap-1"
-                >
-                  <RotateCcw className="w-3 h-3" />
-                  <span>Reset ke admin123</span>
-                </button>
-              </div>
+              {isDefaultPin && (
+                <div className="pt-1 flex items-center justify-between text-[10px] text-slate-400">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      if (window.confirm('Reset password admin ke bawaan pabrikan ("admin123")?')) {
+                        resetAdminPin();
+                        setShowPinModal(false);
+                        setOldPin('');
+                        setNewPin('');
+                        setConfirmPin('');
+                        setPinError('');
+                      }
+                    }}
+                    className="hover:text-amber-400 flex items-center gap-1"
+                  >
+                    <RotateCcw className="w-3 h-3" />
+                    <span>Reset ke admin123</span>
+                  </button>
+                </div>
+              )}
 
               <div className="flex items-center justify-end gap-2 pt-2 border-t border-slate-800">
                 <button

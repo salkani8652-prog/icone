@@ -83,18 +83,18 @@ export const Hero: React.FC<HeroProps> = ({
           <div className="lg:col-span-5 relative">
             <div className="relative rounded-lg overflow-hidden border border-slate-800 shadow-2xl bg-slate-900 group">
               <img
-                src="/src/assets/images/hero_radio_poc_dmr_1794197266754.jpg"
-                alt="Radio PoC dan DMR Profesional Icone Globaltech"
-                className="w-full h-auto object-cover aspect-16/9 lg:aspect-4/3 transition-transform duration-500 group-hover:scale-102"
+                src="/assets/aistudio/WhatsApp_Image_2026-07-20_at_19.53.28_51ebda55.jpeg"
+                alt="Jajaran Lengkap Perangkat Radio Komunikasi Icone Globaltech"
+                className="w-full h-auto object-cover aspect-16/9 transition-transform duration-500 group-hover:scale-102"
                 referrerPolicy="no-referrer"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent pointer-events-none" />
+              <div className="absolute inset-0 bg-gradient-to-t from-slate-950/70 via-transparent to-transparent pointer-events-none" />
               <div className="absolute bottom-3 left-4 right-4 flex items-center justify-between text-xs text-slate-200 font-mono">
                 <span className="flex items-center gap-1.5">
                   <Radio className="w-3.5 h-3.5 text-amber-400" />
-                  DMR TACTICAL + POC SMART
+                  ICONE HARDWARE LINEUP
                 </span>
-                <span className="text-slate-400">READY FOR DEPLOYMENT</span>
+                <span className="text-slate-400 font-semibold">DMR · POC · DISPATCH</span>
               </div>
             </div>
           </div>

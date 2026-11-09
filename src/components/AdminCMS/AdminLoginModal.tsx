@@ -13,7 +13,7 @@ export const AdminLoginModal: React.FC<AdminLoginModalProps> = ({
   onClose,
   onSuccess,
 }) => {
-  const { loginAdmin, changeAdminPin, resetAdminPin, adminPin } = useProducts();
+  const { loginAdmin, changeAdminPin, resetAdminPin, isDefaultPin } = useProducts();
   const [mode, setMode] = useState<'login' | 'change_password'>('login');
 
   // Login form state
@@ -186,30 +186,32 @@ export const AdminLoginModal: React.FC<AdminLoginModalProps> = ({
               )}
             </div>
 
-            {/* Quick Helper Box */}
-            <div className="p-2.5 bg-slate-950/70 border border-slate-800 rounded text-[11px] text-slate-400 space-y-1.5">
-              <div className="flex items-center justify-between">
-                <span>Default Pabrikan: <code className="text-amber-400 font-mono font-bold">admin123</code></span>
-                <button
-                  type="button"
-                  onClick={() => setPin('admin123')}
-                  className="text-amber-400 hover:underline font-medium text-[10px]"
-                >
-                  Isi admin123
-                </button>
+            {/* Quick Helper Box (Hanya tampil jika password masih default pabrikan) */}
+            {isDefaultPin && (
+              <div className="p-2.5 bg-slate-950/70 border border-slate-800 rounded text-[11px] text-slate-400 space-y-1.5">
+                <div className="flex items-center justify-between">
+                  <span>Default Pabrikan: <code className="text-amber-400 font-mono font-bold">admin123</code></span>
+                  <button
+                    type="button"
+                    onClick={() => setPin('admin123')}
+                    className="text-amber-400 hover:underline font-medium text-[10px]"
+                  >
+                    Isi admin123
+                  </button>
+                </div>
+                <div className="flex items-center justify-between pt-1 border-t border-slate-900">
+                  <span className="text-[10px] text-slate-500">Lupa password?</span>
+                  <button
+                    type="button"
+                    onClick={handleResetToDefault}
+                    className="text-slate-400 hover:text-amber-400 font-medium text-[10px] flex items-center gap-1"
+                  >
+                    <RotateCcw className="w-3 h-3" />
+                    <span>Reset Password</span>
+                  </button>
+                </div>
               </div>
-              <div className="flex items-center justify-between pt-1 border-t border-slate-900">
-                <span className="text-[10px] text-slate-500">Lupa password?</span>
-                <button
-                  type="button"
-                  onClick={handleResetToDefault}
-                  className="text-slate-400 hover:text-amber-400 font-medium text-[10px] flex items-center gap-1"
-                >
-                  <RotateCcw className="w-3 h-3" />
-                  <span>Reset Password</span>
-                </button>
-              </div>
-            </div>
+            )}
 
             <div className="pt-2 flex items-center justify-end gap-2">
               <button
@@ -300,16 +302,18 @@ export const AdminLoginModal: React.FC<AdminLoginModalProps> = ({
                   <p className="text-[11px] text-rose-400 font-medium">{changeError}</p>
                 )}
 
-                <div className="flex items-center justify-between pt-1">
-                  <button
-                    type="button"
-                    onClick={handleResetToDefault}
-                    className="text-[10px] text-slate-400 hover:text-amber-400 flex items-center gap-1"
-                  >
-                    <RotateCcw className="w-3 h-3" />
-                    <span>Lupa? Reset ke admin123</span>
-                  </button>
-                </div>
+                {isDefaultPin && (
+                  <div className="flex items-center justify-between pt-1">
+                    <button
+                      type="button"
+                      onClick={handleResetToDefault}
+                      className="text-[10px] text-slate-400 hover:text-amber-400 flex items-center gap-1"
+                    >
+                      <RotateCcw className="w-3 h-3" />
+                      <span>Lupa? Reset ke admin123</span>
+                    </button>
+                  </div>
+                )}
 
                 <div className="pt-2 flex items-center justify-end gap-2 border-t border-slate-800">
                   <button

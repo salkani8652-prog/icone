@@ -10,6 +10,7 @@ interface ProductEditorModalProps {
 }
 
 const PRESET_IMAGES = [
+  { label: 'Icone Full Lineup (Official)', url: '/assets/aistudio/WhatsApp_Image_2026-07-20_at_19.53.28_51ebda55.jpeg' },
   { label: 'PoC Smart Terminal (Touchscreen)', url: '/src/assets/images/product_poc_smart_terminal_1794197268075.jpg' },
   { label: 'DMR Tactical Handheld (Keypad)', url: '/src/assets/images/product_dmr_tactical_handheld_1794197268240.jpg' },
   { label: 'DMR Mobile Base Rig (In-Vehicle)', url: '/src/assets/images/product_dmr_mobile_base_1794197268226.jpg' },
